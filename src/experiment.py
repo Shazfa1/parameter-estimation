@@ -21,7 +21,7 @@ class Experiment:
             false_alarm_rates.append(sdt.false_alarm_rate())
             hit_rates.append(sdt.hit_rate())
         
-        # Sort based on false alarm rates
+         # Sort based on false alarm rates
         sorted_indices = np.argsort(false_alarm_rates)
         sorted_false_alarm_rates = [false_alarm_rates[i] for i in sorted_indices]
         sorted_hit_rates = [hit_rates[i] for i in sorted_indices]
@@ -33,6 +33,10 @@ class Experiment:
             raise ValueError("No conditions added to the experiment")
         
         far, hr = self.sorted_roc_points()
+
+        # Add (0,0) and (1,1) points for AUC calculation
+        far = [0] + far + [1]
+        hr = [0] + hr + [1]
         
         # Compute AUC using the trapezoidal rule
         auc = np.trapz(hr, far)
