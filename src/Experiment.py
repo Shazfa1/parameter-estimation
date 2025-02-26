@@ -1,5 +1,5 @@
 import numpy as np
-from SignalDetection import SignalDetection
+from src.SignalDetection import SignalDetection
 
 class Experiment:
     def __init__(self):
