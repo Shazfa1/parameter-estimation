@@ -1,7 +1,7 @@
 #new
 #code generated from ChatGPT, still work in progress
 import unittest
-from experiment import Experiment
+from Experiment import Experiment
 from SignalDetection import SignalDetection
 
 class TestExperiment(unittest.TestCase):
