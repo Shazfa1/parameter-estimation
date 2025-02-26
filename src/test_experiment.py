@@ -2,7 +2,7 @@
 #code generated from ChatGPT, still work in progress
 import unittest
 from src.Experiment import Experiment
-from test_driven_development.src.SignalDetection import SignalDetection
+from src.SignalDetection import SignalDetection
 
 class TestExperiment(unittest.TestCase):
     
