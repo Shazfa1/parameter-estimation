@@ -15,14 +15,18 @@ class SignalDetection:
         self.falseAlarms = falseAlarms
         self.correctRejections = correctRejections
 
+    def hit_rate(self):
+        return self.hits / (self.hits + self.misses) if (self.hits + self.misses) > 0 else 0.5
+
+    def false_alarm_rate(self):
+        return self.falseAlarms / (self.falseAlarms + self.correctRejections) if (self.falseAlarms + self.correctRejections) > 0 else 0.5
+
+    def _adjusted_rate(self, rate):
+        return max(0.01, min(rate, 0.99))
+
     def d_prime(self):
-        # Handles hit+miss=0 or falseAlarm+correctRejections=0... Assume 0.5 chance rate
-        hit_rate = self.hits / (self.hits + self.misses) if (self.hits + self.misses) > 0 else 0.5
-        fa_rate = self.falseAlarms / (self.falseAlarms + self.correctRejections) if (self.falseAlarms + self.correctRejections) > 0 else 0.5
-        
-        # Adjust rates if they are 0 or 1
-        hit_rate = max(0.01, min(hit_rate, 0.99))
-        fa_rate = max(0.01, min(fa_rate, 0.99))
+        hit_rate = self._adjusted_rate(self.hit_rate())
+        fa_rate = self._adjusted_rate(self.false_alarm_rate())
         
         z_hit = norm.ppf(hit_rate)
         z_fa = norm.ppf(fa_rate)
@@ -30,13 +34,8 @@ class SignalDetection:
         return z_hit - z_fa
 
     def criterion(self):
-        # Handles hit+miss=0 or falseAlarm+correctRejections=0... Assume 0.5 chance rate
-        hit_rate = self.hits / (self.hits + self.misses) if (self.hits + self.misses) > 0 else 0.5
-        fa_rate = self.falseAlarms / (self.falseAlarms + self.correctRejections) if (self.falseAlarms + self.correctRejections) > 0 else 0.5
-        
-        # Adjust rates if they are 0 or 1
-        hit_rate = max(0.01, min(hit_rate, 0.99))
-        fa_rate = max(0.01, min(fa_rate, 0.99))
+        hit_rate = self._adjusted_rate(self.hit_rate())
+        fa_rate = self._adjusted_rate(self.false_alarm_rate())
         
         z_hit = norm.ppf(hit_rate)
         z_fa = norm.ppf(fa_rate)

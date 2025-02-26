@@ -20,7 +20,7 @@ class Experiment:
         for sdt in self.conditions:
             false_alarm_rates.append(sdt.false_alarm_rate())
             hit_rates.append(sdt.hit_rate())
-        
+
         # Sort based on false alarm rates
         sorted_indices = np.argsort(false_alarm_rates)
         sorted_false_alarm_rates = [false_alarm_rates[i] for i in sorted_indices]
