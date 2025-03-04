@@ -10,6 +10,7 @@ class TestSimplifiedThreePL(unittest.TestCase):
 
     def setUp(self):
         # Create a sample experiment for testing
+        self.experiment = Experiment()
         conditions = [
             SignalDetection(hits=55, misses=45, falseAlarms=45, correctRejections=55),
             SignalDetection(hits=60, misses=40, falseAlarms=40, correctRejections=60),
@@ -17,7 +18,9 @@ class TestSimplifiedThreePL(unittest.TestCase):
             SignalDetection(hits=90, misses=10, falseAlarms=10, correctRejections=90),
             SignalDetection(hits=95, misses=5, falseAlarms=5, correctRejections=95)
         ]
-        self.experiment = Experiment(conditions)
+        for i, condition in enumerate(conditions):
+            self.experiment.add_condition(condition, f"Condition {i+1}")
+        
         self.model = SimplifiedThreePL(self.experiment)
 
     def test_constructor(self):
