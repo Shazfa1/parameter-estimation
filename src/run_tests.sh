@@ -5,7 +5,7 @@
 SRC_DIR="./src"
 
 # Set the name of your test file
-TEST_FILE="TestSimplifiedThreePL.py"
+TEST_FILE="test_SimplifiedThreeP.py"
 
 # Colors for output
 GREEN='\033[0;32m'
