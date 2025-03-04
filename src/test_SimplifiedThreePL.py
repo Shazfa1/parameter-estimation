@@ -65,13 +65,13 @@ class TestSimplifiedThreePL(unittest.TestCase):
         low_disc_high_ability = self.model.predict([0.0001, 0])
         self.assertTrue(all(abs(l - h) < 1e-6 for l, h in zip(low_disc_low_ability, low_disc_high_ability)))
 
-    # Test with known parameter values
-    self.model.set_discrimination(1.0)
-    self.model.set_logit_base_rate(0)  # c = 0.5
-    self.model._person_param = 0
-    expected_output = 0.5 + 0.5 / (1 + np.exp(-1 * (0 - np.array([2, 1, 0, -1, -2]))))
-    actual_output = self.model.predict([1.0, 0])
-    np.testing.assert_almost_equal(actual_output, expected_output)
+        # Test with known parameter values
+        self.model.set_discrimination(1.0)
+        self.model.set_logit_base_rate(0)  # c = 0.5
+        self.model._person_param = 0
+        expected_output = 0.5 + 0.5 / (1 + np.exp(-1 * (0 - np.array([2, 1, 0, -1, -2]))))
+        actual_output = self.model.predict([1.0, 0])
+        np.testing.assert_almost_equal(actual_output, expected_output)
 
     def test_parameter_estimation(self):
         # Test that negative_log_likelihood improves after fitting
