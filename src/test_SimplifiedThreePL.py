@@ -2,7 +2,8 @@
 import unittest
 import numpy as np
 from scipy.special import expit
-from src.Experiment import Experiment, SDT
+from src.SignalDetection import SignalDetection
+from src.Experiment import Experiment
 from src.SimplifiedThreePL import SimplifiedThreePL
 
 class TestSimplifiedThreePL(unittest.TestCase):
