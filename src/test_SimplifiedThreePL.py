@@ -99,6 +99,24 @@ class TestSimplifiedThreePL(unittest.TestCase):
         actual_output = self.model.predict([1.0, 0])
         np.testing.assert_almost_equal(actual_output, expected_output)
 
+        # Test with very low (near-zero) discrimination
+        self.model.set_discrimination(1e-10)  # Extremely low, positive discrimination
+        self.model._person_param = 0
+        low_disc_low_ability = self.model.predict([1e-10, 0])
+        self.model._person_param = 2
+        low_disc_high_ability = self.model.predict([1e-10, 0])
+        
+        # Print debug information
+        print(f"Low ability predictions: {low_disc_low_ability}")
+        print(f"High ability predictions: {high_disc_high_ability}")
+        
+        # Check if the differences are small
+        differences = [abs(l - h) for l, h in zip(low_disc_low_ability, low_disc_high_ability)]
+        max_difference = max(differences)
+        print(f"Maximum difference: {max_difference}")
+        
+        self.assertTrue(max_difference < 1e-6, f"Maximum difference {max_difference} is not less than 1e-6")
+
     def test_parameter_estimation(self):
         # Test that negative_log_likelihood improves after fitting
         initial_nll = self.model.negative_log_likelihood([1.0, 0.0])
