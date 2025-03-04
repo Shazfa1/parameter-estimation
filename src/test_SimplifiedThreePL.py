@@ -11,11 +11,11 @@ class TestSimplifiedThreePL(unittest.TestCase):
     def setUp(self):
         # Create a sample experiment for testing
         conditions = [
-            SDT(hits=55, misses=45, false_alarms=45, correct_rejections=55),
-            SDT(hits=60, misses=40, false_alarms=40, correct_rejections=60),
-            SDT(hits=75, misses=25, false_alarms=25, correct_rejections=75),
-            SDT(hits=90, misses=10, false_alarms=10, correct_rejections=90),
-            SDT(hits=95, misses=5, false_alarms=5, correct_rejections=95)
+            SignalDetection(hits=55, misses=45, false_alarms=45, correct_rejections=55),
+            SignalDetection(hits=60, misses=40, false_alarms=40, correct_rejections=60),
+            SignalDetection(hits=75, misses=25, false_alarms=25, correct_rejections=75),
+            SignalDetection(hits=90, misses=10, false_alarms=10, correct_rejections=90),
+            SignalDetection(hits=95, misses=5, false_alarms=5, correct_rejections=95)
         ]
         self.experiment = Experiment(conditions)
         self.model = SimplifiedThreePL(self.experiment)
@@ -64,11 +64,11 @@ class TestSimplifiedThreePL(unittest.TestCase):
 
         # Test that a larger estimate of a is returned for steeper curve
         steep_conditions = [
-            SDT(hits=51, misses=49, false_alarms=49, correct_rejections=51),
-            SDT(hits=60, misses=40, false_alarms=40, correct_rejections=60),
-            SDT(hits=80, misses=20, false_alarms=20, correct_rejections=80),
-            SDT(hits=95, misses=5, false_alarms=5, correct_rejections=95),
-            SDT(hits=99, misses=1, false_alarms=1, correct_rejections=99)
+            SignalDetection(hits=51, misses=49, false_alarms=49, correct_rejections=51),
+            SignalDetection(hits=60, misses=40, false_alarms=40, correct_rejections=60),
+            SignalDetection(hits=80, misses=20, false_alarms=20, correct_rejections=80),
+            SignalDetection(hits=95, misses=5, false_alarms=5, correct_rejections=95),
+            SignalDetection(hits=99, misses=1, false_alarms=1, correct_rejections=99)
         ]
         steep_experiment = Experiment(steep_conditions)
         steep_model = SimplifiedThreePL(steep_experiment)
@@ -96,11 +96,11 @@ class TestSimplifiedThreePL(unittest.TestCase):
     def test_integration(self):
         # Integration test
         conditions = [
-            SDT(hits=55, misses=45, false_alarms=45, correct_rejections=55),
-            SDT(hits=60, misses=40, false_alarms=40, correct_rejections=60),
-            SDT(hits=75, misses=25, false_alarms=25, correct_rejections=75),
-            SDT(hits=90, misses=10, false_alarms=10, correct_rejections=90),
-            SDT(hits=95, misses=5, false_alarms=5, correct_rejections=95)
+            SignalDetection(hits=55, misses=45, false_alarms=45, correct_rejections=55),
+            SignalDetection(hits=60, misses=40, false_alarms=40, correct_rejections=60),
+            SignalDetection(hits=75, misses=25, false_alarms=25, correct_rejections=75),
+            SignalDetection(hits=90, misses=10, false_alarms=10, correct_rejections=90),
+            SignalDetection(hits=95, misses=5, false_alarms=5, correct_rejections=95)
         ]
         experiment = Experiment(conditions)
         model = SimplifiedThreePL(experiment)
