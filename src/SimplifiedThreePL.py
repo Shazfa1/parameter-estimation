@@ -71,8 +71,8 @@ class SimplifiedThreePL:
         return self._logit_base_rate
 
     def set_discrimination(self, value):
-        if value <= 0:
-            raise ValueError("Discrimination parameter (alpha) must be positive.")
+        if value < 0:
+            raise ValueError("Discrimination parameter (alpha) must be non-negative.")
         self._discrimination = value
         self._is_fitted = False
 
