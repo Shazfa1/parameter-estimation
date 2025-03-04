@@ -117,6 +117,39 @@ class TestSimplifiedThreePL(unittest.TestCase):
         
         self.assertTrue(max_difference < 1e-6, f"Maximum difference {max_difference} is not less than 1e-6")
 
+
+    # Test with very low (near-zero) discrimination
+        print("\nTesting with very low discrimination:")
+        self.model.set_discrimination(1e-10)
+        self.model.set_logit_base_rate(0)  # c = 0.5
+        self.model._person_param = 0
+        low_disc_low_ability = self.model.predict([1e-10, 0])
+        print(f"Low ability predictions: {low_disc_low_ability}")
+        
+        self.model._person_param = 2
+        low_disc_high_ability = self.model.predict([1e-10, 0])
+        print(f"High ability predictions: {low_disc_high_ability}")
+        
+        # Calculate and print differences
+        differences = [abs(l - h) for l, h in zip(low_disc_low_ability, low_disc_high_ability)]
+        print(f"Absolute differences: {differences}")
+        max_difference = max(differences)
+        print(f"Maximum difference: {max_difference}")
+        
+        # Print model parameters
+        print(f"Discrimination: {self.model.get_discrimination()}")
+        print(f"Base rate: {self.model.get_base_rate()}")
+        print(f"Logit base rate: {self.model.get_logit_base_rate()}")
+        print(f"Difficulty params: {self.model._difficulty_params}")
+        
+        # Assertion with detailed error message
+        self.assertTrue(
+            all(abs(l - h) < 1e-6 for l, h in zip(low_disc_low_ability, low_disc_high_ability)),
+            f"Differences exceed 1e-6. Max difference: {max_difference}"
+        )
+
+    
+
     def test_parameter_estimation(self):
         # Test that negative_log_likelihood improves after fitting
         initial_nll = self.model.negative_log_likelihood([1.0, 0.0])
