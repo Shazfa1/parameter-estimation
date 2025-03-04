@@ -16,16 +16,33 @@ NC='\033[0m' # No Color
 run_tests() {
     echo "Running tests for SimplifiedThreePL..."
     
-    # Run the unittest command and capture the output
-    TEST_OUTPUT=$(python -m unittest $SRC_DIR/$TEST_FILE 2>&1)
+    # Run the unittest command with verbose output and capture it
+    TEST_OUTPUT=$(python -m unittest -v $SRC_DIR/$TEST_FILE 2>&1)
     
     # Check the exit status of the test command
     if [ $? -eq 0 ]; then
         echo -e "${GREEN}All tests passed!${NC}"
+        echo "$TEST_OUTPUT"
     else
         echo -e "${RED}Some tests failed.${NC}"
         echo "Test output:"
-        echo "$TEST_OUTPUT"
+        
+        # Process the output to highlight failures
+        while IFS= read -r line; do
+            if [[ $line == FAIL:* ]]; then
+                echo -e "${RED}$line${NC}"
+            elif [[ $line == ERROR:* ]]; then
+                echo -e "${RED}$line${NC}"
+            elif [[ $line == test_* ]]; then
+                if [[ $line == *ok ]]; then
+                    echo -e "${GREEN}$line${NC}"
+                else
+                    echo -e "${YELLOW}$line${NC}"
+                fi
+            else
+                echo "$line"
+            fi
+        done <<< "$TEST_OUTPUT"
     fi
 }
 
