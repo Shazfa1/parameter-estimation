@@ -17,7 +17,7 @@ run_tests() {
     echo "Running tests for SimplifiedThreePL..."
     
     # Run the unittest command with verbose output and capture it
-    TEST_OUTPUT=$(python -m unittest -v $SRC_DIR/$TEST_FILE 2>&1)
+    TEST_OUTPUT=$(python3 -m unittest -v $SRC_DIR/$TEST_FILE 2>&1)
     
     # Check the exit status of the test command
     if [ $? -eq 0 ]; then
