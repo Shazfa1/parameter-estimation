@@ -5,6 +5,9 @@ from src.Experiment import Experiment
 
 class SimplifiedThreePL:
     def __init__(self, experiment: Experiment):
+        if experiment is None:
+            raise ValueError("Experiment cannot be None")
+        self.experiment = experiment
         self.experiment = experiment
         self._base_rate = None  # c
         self._logit_base_rate = None  # q (logit of c)
