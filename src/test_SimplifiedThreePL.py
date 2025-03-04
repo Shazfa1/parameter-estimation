@@ -25,11 +25,18 @@ class TestSimplifiedThreePL(unittest.TestCase):
 
     def test_constructor(self):
         # Test that constructor properly handles valid inputs
-        self.assertIsInstance(self.model, SimplifiedThreePL)
+        valid_experiment = Experiment()
+        valid_model = SimplifiedThreePL(valid_experiment)
+        self.assertIsInstance(valid_model, SimplifiedThreePL)
         
         # Test that constructor raises appropriate exceptions for invalid inputs
         with self.assertRaises(ValueError):
             SimplifiedThreePL(None)
+        
+        # Test with an empty experiment (if this should be invalid)
+        empty_experiment = Experiment()
+        with self.assertRaises(ValueError):
+            SimplifiedThreePL(empty_experiment)
 
     def test_predict(self):
         # Test that predict() outputs values between 0 and 1 (inclusive)
