@@ -34,6 +34,8 @@ class SimplifiedThreePL:
     def predict(self, parameters):
         alpha, q = parameters
         c = expit(q)  # Transform q back to c using inverse logit
+        if abs(alpha) < 1e-8:  # If discrimination is extremely low
+            return np.full(len(self._difficulty_params), c)  # Return constant probability
         probabilities = c + (1 - c) / (1 + np.exp(-alpha * (self._person_param - self._difficulty_params)))
         return probabilities
 
