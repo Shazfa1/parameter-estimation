@@ -36,27 +36,42 @@ class TestSimplifiedThreePL(unittest.TestCase):
         self.model.fit()
         predictions = self.model.predict([self.model.get_discrimination(), self.model.get_logit_base_rate()])
         self.assertTrue(all(0 <= p <= 1 for p in predictions))
-
+    
         # Test that higher base rate values result in higher probabilities
         low_base_rate = self.model.predict([1.0, -2.0])  # logit(-2) ≈ 0.12
         high_base_rate = self.model.predict([1.0, 2.0])  # logit(2) ≈ 0.88
         self.assertTrue(all(h > l for h, l in zip(high_base_rate, low_base_rate)))
-
-        # Test difficulty and ability effects
+    
+        # Test difficulty effects
         self.model.set_discrimination(1.0)
         self.model.set_logit_base_rate(0)  # c = 0.5
+        easy_difficulty = self.model.predict([1.0, 0])
+        self.model._difficulty_params = np.array([4, 3, 2, 1, 0])  # Increase difficulty
+        hard_difficulty = self.model.predict([1.0, 0])
+        self.assertTrue(all(e > h for e, h in zip(easy_difficulty, hard_difficulty)))
+    
+        # Test ability effects
+        self.model._difficulty_params = np.array([2, 1, 0, -1, -2])  # Reset difficulty
         low_ability = self.model.predict([1.0, 0])
         self.model._person_param = 2  # Set higher ability
         high_ability = self.model.predict([1.0, 0])
         self.assertTrue(all(h > l for h, l in zip(high_ability, low_ability)))
-
-        # Test with negative discrimination
-        self.model.set_discrimination(-1.0)
+    
+        # Test with very low (near-zero) discrimination
+        self.model.set_discrimination(0.0001)  # Very low, positive discrimination
         self.model._person_param = 0
-        neg_disc_low_ability = self.model.predict([-1.0, 0])
+        low_disc_low_ability = self.model.predict([0.0001, 0])
         self.model._person_param = 2
-        neg_disc_high_ability = self.model.predict([-1.0, 0])
-        self.assertTrue(all(l > h for l, h in zip(neg_disc_low_ability, neg_disc_high_ability)))
+        low_disc_high_ability = self.model.predict([0.0001, 0])
+        self.assertTrue(all(abs(l - h) < 1e-6 for l, h in zip(low_disc_low_ability, low_disc_high_ability)))
+
+    # Test with known parameter values
+    self.model.set_discrimination(1.0)
+    self.model.set_logit_base_rate(0)  # c = 0.5
+    self.model._person_param = 0
+    expected_output = 0.5 + 0.5 / (1 + np.exp(-1 * (0 - np.array([2, 1, 0, -1, -2]))))
+    actual_output = self.model.predict([1.0, 0])
+    np.testing.assert_almost_equal(actual_output, expected_output)
 
     def test_parameter_estimation(self):
         # Test that negative_log_likelihood improves after fitting
