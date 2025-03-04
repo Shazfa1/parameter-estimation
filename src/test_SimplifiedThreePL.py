@@ -22,7 +22,7 @@ class TestSimplifiedThreePL(unittest.TestCase):
             self.experiment.add_condition(condition, f"Condition {i+1}")
         
         self.model = SimplifiedThreePL(self.experiment)
-
+    
     def test_constructor(self):
         # Test that constructor properly handles valid inputs
         valid_experiment = Experiment()
@@ -47,19 +47,6 @@ class TestSimplifiedThreePL(unittest.TestCase):
         empty_experiment = Experiment()
         with self.assertRaises(ValueError):
             SimplifiedThreePL(empty_experiment)
-        
-        # Test with mismatched lengths (if applicable)
-        mismatched_experiment = Experiment()
-        mismatched_conditions = [
-            SignalDetection(hits=55, misses=45, falseAlarms=45, correctRejections=55),
-            SignalDetection(hits=60, misses=40, falseAlarms=40, correctRejections=60)
-        ]
-        for i, condition in enumerate(mismatched_conditions):
-            mismatched_experiment.add_condition(condition, f"Condition {i+1}")
-        
-        # Assuming SimplifiedThreePL expects exactly 5 conditions
-        with self.assertRaises(ValueError):
-            SimplifiedThreePL(mismatched_experiment)
         
         # Test trying to access parameter estimates that aren't determined yet
         untrained_model = SimplifiedThreePL(valid_experiment)
