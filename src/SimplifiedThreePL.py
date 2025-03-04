@@ -7,14 +7,15 @@ class SimplifiedThreePL:
     def __init__(self, experiment: Experiment):
         if experiment is None:
             raise ValueError("Experiment cannot be None")
+        if len(experiment.conditions) == 0:
+            raise ValueError("Experiment must contain at least one condition")
         self.experiment = experiment
-        self.experiment = experiment
-        self._base_rate = None  # c
-        self._logit_base_rate = None  # q (logit of c)
-        self._discrimination = None  # alpha
+        self._base_rate = None
+        self._logit_base_rate = None
+        self._discrimination = None
         self._is_fitted = False
-        self._difficulty_params = np.array([2, 1, 0, -1, -2])  # bi
-        self._person_param = 0  # theta
+        self._difficulty_params = np.array([2, 1, 0, -1, -2])
+        self._person_param = 0
 
     def summary(self):
         n_total = sum(sdt.hits + sdt.misses + sdt.falseAlarms + sdt.correctRejections 
