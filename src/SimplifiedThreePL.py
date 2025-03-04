@@ -1,4 +1,3 @@
-#new python script
 import numpy as np
 from scipy.optimize import minimize
 from scipy.special import expit, logit
@@ -15,9 +14,9 @@ class SimplifiedThreePL:
         self._person_param = 0  # theta
 
     def summary(self):
-        n_total = sum(sdt.hits + sdt.misses + sdt.false_alarms + sdt.correct_rejections 
+        n_total = sum(sdt.hits + sdt.misses + sdt.falseAlarms + sdt.correctRejections 
                       for sdt in self.experiment.conditions)
-        n_correct = sum(sdt.hits + sdt.correct_rejections for sdt in self.experiment.conditions)
+        n_correct = sum(sdt.hits + sdt.correctRejections for sdt in self.experiment.conditions)
         n_incorrect = n_total - n_correct
         n_conditions = len(self.experiment.conditions)
 
@@ -38,8 +37,8 @@ class SimplifiedThreePL:
         probabilities = self.predict(parameters)
         log_likelihood = 0
         for p, sdt in zip(probabilities, self.experiment.conditions):
-            n_correct = sdt.hits + sdt.correct_rejections
-            n_total = sdt.hits + sdt.misses + sdt.false_alarms + sdt.correct_rejections
+            n_correct = sdt.hits + sdt.correctRejections
+            n_total = sdt.hits + sdt.misses + sdt.falseAlarms + sdt.correctRejections
             log_likelihood += n_correct * np.log(p) + (n_total - n_correct) * np.log(1 - p)
         return -log_likelihood
 
