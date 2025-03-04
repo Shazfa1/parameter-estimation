@@ -26,17 +26,49 @@ class TestSimplifiedThreePL(unittest.TestCase):
     def test_constructor(self):
         # Test that constructor properly handles valid inputs
         valid_experiment = Experiment()
+        valid_conditions = [
+            SignalDetection(hits=55, misses=45, falseAlarms=45, correctRejections=55),
+            SignalDetection(hits=60, misses=40, falseAlarms=40, correctRejections=60),
+            SignalDetection(hits=75, misses=25, falseAlarms=25, correctRejections=75)
+        ]
+        for i, condition in enumerate(valid_conditions):
+            valid_experiment.add_condition(condition, f"Condition {i+1}")
+        
         valid_model = SimplifiedThreePL(valid_experiment)
         self.assertIsInstance(valid_model, SimplifiedThreePL)
         
         # Test that constructor raises appropriate exceptions for invalid inputs
+        
+        # Test with None
         with self.assertRaises(ValueError):
             SimplifiedThreePL(None)
         
-        # Test with an empty experiment (if this should be invalid)
+        # Test with an empty experiment
         empty_experiment = Experiment()
         with self.assertRaises(ValueError):
             SimplifiedThreePL(empty_experiment)
+        
+        # Test with mismatched lengths (if applicable)
+        mismatched_experiment = Experiment()
+        mismatched_conditions = [
+            SignalDetection(hits=55, misses=45, falseAlarms=45, correctRejections=55),
+            SignalDetection(hits=60, misses=40, falseAlarms=40, correctRejections=60)
+        ]
+        for i, condition in enumerate(mismatched_conditions):
+            mismatched_experiment.add_condition(condition, f"Condition {i+1}")
+        
+        # Assuming SimplifiedThreePL expects exactly 5 conditions
+        with self.assertRaises(ValueError):
+            SimplifiedThreePL(mismatched_experiment)
+        
+        # Test trying to access parameter estimates that aren't determined yet
+        untrained_model = SimplifiedThreePL(valid_experiment)
+        with self.assertRaises(ValueError):
+            untrained_model.get_discrimination()
+        with self.assertRaises(ValueError):
+            untrained_model.get_base_rate()
+        with self.assertRaises(ValueError):
+            untrained_model.get_logit_base_rate()
 
     def test_predict(self):
         # Test that predict() outputs values between 0 and 1 (inclusive)
