@@ -37,6 +37,7 @@ class SimplifiedThreePL:
         if abs(alpha) < 1e-8:  # If discrimination is extremely low
             return np.full(len(self._difficulty_params), c)  # Return constant probability
         probabilities = c + (1 - c) / (1 + np.exp(-alpha * (self._person_param - self._difficulty_params)))
+        print(f"Predicted probabilities: {probabilities}") #debug
         return probabilities
 
     def negative_log_likelihood(self, parameters):
@@ -51,7 +52,7 @@ class SimplifiedThreePL:
     def fit(self):
         initial_guess = [1.0, 0.0]  # Initial guess for alpha and q
         bounds = [(0, None), (None, None)]  # alpha > 0, q unbounded
-        result = minimize(self.negative_log_likelihood, initial_guess, method='L-BFGS-B', bounds=bounds)
+        result = minimize(self.negative_log_likelihood, initial_guess, method='L-BFGS-B', bounds=bounds, options={'ftol': 1e-8})
         
         if result.success:
             self._discrimination, self._logit_base_rate = result.x
