@@ -1,3 +1,4 @@
+#initial code from ChatGPT, then continued to prompt ChatGPT with errors to fix code
 import numpy as np
 from scipy.optimize import minimize
 from scipy.special import expit, logit
