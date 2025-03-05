@@ -1,4 +1,5 @@
 #new bash script for running tests
+#generated using ChatGPT
 #!/bin/bash
 
 # Set the directory where your source code is located
