@@ -165,7 +165,9 @@ class TestSimplifiedThreePL(unittest.TestCase):
             SignalDetection(hits=95, misses=5, falseAlarms=5, correctRejections=95),
             SignalDetection(hits=99, misses=1, falseAlarms=1, correctRejections=99)
         ]
-        steep_experiment = Experiment(steep_conditions)
+        steep_experiment = Experiment()
+        for condition in steep_conditions:
+            steep_experiment.add_condition(condition)
         steep_model = SimplifiedThreePL(steep_experiment)
         steep_model.fit()
         self.assertGreater(steep_model.get_discrimination(), self.model.get_discrimination())
@@ -197,7 +199,9 @@ class TestSimplifiedThreePL(unittest.TestCase):
             SignalDetection(hits=90, misses=10, falseAlarms=10, correctRejections=90),
             SignalDetection(hits=95, misses=5, falseAlarms=5, correctRejections=95)
         ]
-        experiment = Experiment(conditions)
+        experiment = Experiment()
+        for condition in conditions:
+            experiment.add_condition(condition)
         model = SimplifiedThreePL(experiment)
         model.fit()
         
